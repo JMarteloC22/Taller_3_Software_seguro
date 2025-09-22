@@ -55,3 +55,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
+
+const userRoutes = require('./routes/users');
+app.use('/api/users', userRoutes);
