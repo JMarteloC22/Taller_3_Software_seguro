@@ -49,6 +49,6 @@ Este debería mostrar el siguiente resultado:
 Con estos pasos ya podrá acceder al aplicativo e interactuar con él sin problemas.
 
 ---
-## Despliegue del aplicativo
+## Recomendaciones basicas
 
 este aplicativo se realizo con fines educativos, por lo que en dado caso que sea necesario el reinicio del backend es muy posible que genere error con la base de datos, por lo que es recomendable, para ver bien los efectos causados en el codigo, ademas de poderse ejecutar sin problemas, es necesario que elimine el documento **`database.db`**, este normalmente se ubica en el folder de `backend`, el documento hace referencia a la base de datos que interactua con el aplicativo, y al ejecutarse el servidor nuevamente, es posible que genere fallos con el documento mencionado 
