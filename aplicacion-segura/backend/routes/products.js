@@ -35,22 +35,26 @@ router.post('/', verifyToken, (req, res) => {
 });
 
 // Actualizar producto
+// Reemplazar el endpoint PUT en backend/routes/products.js con este código vulnerable
 router.put('/:id', verifyToken, (req, res) => {
-    const { name, description } = req.body;
-    const productId = req.params.id;
+ const { name, description } = req.body;
+ const productId = req.params.id;
 
-    const checkOwnerSql = 'SELECT owner_id FROM products WHERE id = ?';
-    db.get(checkOwnerSql, [productId], (err, product) => {
-        if (err || !product) return res.status(404).json({ error: 'Producto no encontrado.' });
-        if (product.owner_id !== req.user.id) return res.status(403).json({ error: 'No autorizado.' });
-
-        const updateSql = 'UPDATE products SET name = ?, description = ? WHERE id = ?';
-        db.run(updateSql, [name, description, productId], function (err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: 'Producto actualizado con éxito.', changes: this.changes });
-        });
-    });
+ // ¡VULNERABILIDAD! No se verifica si el usuario autenticado (req.user.id)
+ // es el propietario del producto (productId).
+ // Cualquier usuario autenticado puede modificar cualquier producto si conoce su ID.
+ const updateSql = 'UPDATE products SET name =?, description =? WHERE id =?';
+ db.run(updateSql, [name, description, productId], function(err) {
+ if (err) {
+ return res.status(500).json({ error: err.message });
+ }
+ if (this.changes === 0) {
+ return res.status(404).json({ error: 'Producto no encontrado.' });
+ }
+ res.json({ message: 'Producto actualizado con éxito (¡inseguro!).' });
+ });
 });
+
 
 // Eliminar producto
 router.delete('/:id', verifyToken, (req, res) => {
